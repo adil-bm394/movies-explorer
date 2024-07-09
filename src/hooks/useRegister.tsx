@@ -36,7 +36,7 @@ const useRegister = (): UseRegisterReturn => {
     
       await localforage.setItem('users', users);
 
-      // May be it not neded Dispatch login action to Redux
+      // May be  it not neded Dispatch login action to Redux
       //dispatch(login({ name: data.name, email: data.email, phone: data.phone }));
       setRegistrationError(null);
       navigate('/login');

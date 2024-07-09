@@ -1,14 +1,14 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
-import Box  from '@mui/material/Box';
-import AppBar from '@mui/material/AppBar';
-import Button from '@mui/material/Button';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import { logout } from '../../redux/slices/userSlice';
-import SeachBar from '../common/SeachBar';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import Box from "@mui/material/Box";
+import AppBar from "@mui/material/AppBar";
+import Button from "@mui/material/Button";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { logout } from "../../redux/slices/userSlice";
+import SeachBar from "../common/SeachBar";
 
 const Navbar: React.FC = () => {
   const dispatch = useDispatch();
@@ -19,18 +19,17 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ bgcolor: 'primary.main' }}>
+    <AppBar position="static" sx={{ bgcolor: "primary.main" }}>
       <Toolbar>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          Movie Explorer
+          <Button color="inherit" component={Link} to="/">
+            Movie Explorer
+          </Button>
         </Typography>
 
-        <SeachBar/>
+        <SeachBar />
 
         <Box>
-          <Button color="inherit" component={Link} to="/">
-            Home
-          </Button>
           <Button color="inherit" component={Link} to="/favorites">
             Favorites
           </Button>

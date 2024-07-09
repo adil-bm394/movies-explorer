@@ -1,5 +1,5 @@
 import React from 'react';
-import   Typography  from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import MovieCard from '../common/MovieCard';
@@ -24,7 +24,8 @@ const MoviesListPage: React.FC = () => {
   }
 
   return (
-    <Container sx={{ marginTop: '13px' }}>
+    <>
+      <Container sx={{width:'92%'}}>
       <Grid container spacing={3}>
         {filteredMovies.map((movie) => (
           <Grid item xs={12} sm={6} md={4} key={movie.imdbID}>
@@ -33,6 +34,8 @@ const MoviesListPage: React.FC = () => {
         ))}
       </Grid>
     </Container>
+    </>
+    
   );
 };
 

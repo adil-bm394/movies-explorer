@@ -6,18 +6,18 @@ export interface Movie {
   Rating: number;
   comments: string[];
   Plot: string;
-  imdbRating:string;
-  Year:string;
-  Released:string;
-  Runtime:string;
-  Genre:string;
-  Director:string;
-  Writer:string;
-  Actors:string;
-  Language:string;
-  Country:string;
-  Awards:string;
-  BoxOffice:string;
+  imdbRating: string;
+  Year: string;
+  Released: string;
+  Runtime: string;
+  Genre: string;
+  Director: string;
+  Writer: string;
+  Actors: string;
+  Language: string;
+  Country: string;
+  Awards: string;
+  BoxOffice: string;
 }
 export interface RegisterFormInputs {
   name: string;
