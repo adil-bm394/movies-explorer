@@ -1,26 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import MoviesListPage from './components/pages/MoviesListPage';
+import LoginPage from './components/pages/LoginPage';
+import RegisterPage from './components/pages/RegisterPage';
+import MoviesDetailPage from './components/pages/MoviesDetailPage';
+import FavoritesPage from './components/pages/FavouritesPage';
+import Navbar from './components/Navbar/Navbar';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<MoviesListPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/movies/:id" element={<MoviesDetailPage />} />
+        <Route path="/favorites" element={<FavoritesPage />} />
+      </Routes>
     </div>
   );
-}
+};
 
 export default App;
