@@ -1,12 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { Movie } from '../../utils/interface/types';
+import { Movie, MoviesState } from '../../utils/interface/types';
 
-interface MoviesState {
-  movies: Movie[];
-  loading: boolean;
-  error: string | null;
-}
+
 
 const initialState: MoviesState = {
   movies: [],

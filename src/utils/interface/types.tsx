@@ -28,3 +28,8 @@ export interface RegisterFormInputs {
 export interface CommentFormInputs {
   comment: string;
 }
+export interface MoviesState {
+  movies: Movie[];
+  loading: boolean;
+  error: string | null;
+}
