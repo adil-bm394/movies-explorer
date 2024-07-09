@@ -4,16 +4,15 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
-import  Box  from '@mui/material/Box';
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import  CardMedia from '@mui/material/CardMedia';
+import CardMedia from '@mui/material/CardMedia';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { addComment } from '../../redux/slices/moviesSlice';
 import { useForm } from 'react-hook-form';
 import { CommentFormInputs } from '../../utils/interface/types';
-
 
 const MoviesDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -46,9 +45,11 @@ const MoviesDetailPage: React.FC = () => {
           />
         
           <CardContent sx={{ flex: '1 1 auto', maxWidth: '100%' }}>
-            <Typography gutterBottom variant="h5" component="h2">
-              {movie.Title}
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'center', textAlign: 'center' }}>
+              <Typography gutterBottom variant="h5" component="h2">
+                    <strong>{movie.Title}</strong> 
+              </Typography>
+            </Box>
             <Typography variant="body2" color="textSecondary" component="p">
               {movie.Plot}
             </Typography>
