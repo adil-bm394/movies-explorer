@@ -2,11 +2,11 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
 import ErrorBoundary from "./components/common/ErrorBoundary";
-import MoviesListPage from "./components/pages/MoviesListPage";
-import LoginPage from "./components/pages/LoginPage";
-import RegisterPage from "./components/pages/RegisterPage";
-import MoviesDetailPage from "./components/pages/MoviesDetailPage";
-import FavoritesPage from "./components/pages/FavouritesPage";
+import MoviesListPage from "./pages/MoviesListPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import MoviesDetailPage from "./pages/MoviesDetailPage";
+import FavoritesPage from "./pages/FavouritesPage";
 
 const App: React.FC = () => {
   return (

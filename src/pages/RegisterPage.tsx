@@ -1,22 +1,34 @@
-import React from 'react';
-import { Controller } from 'react-hook-form';
-import { Link } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
-import  Box  from '@mui/material/Box';
-import   Paper from '@mui/material/Paper';
-import useRegister from '../../hooks/useRegister';
+import React from "react";
+import { Controller } from "react-hook-form";
+import { Link } from "react-router-dom";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import useRegister from "../hooks/useRegister";
 
 const RegisterPage: React.FC = () => {
-  const { register, control, handleSubmit, onSubmit, formState: { errors }, registrationError } = useRegister();
+  const {
+    register,
+    control,
+    handleSubmit,
+    onSubmit,
+    formState: { errors },
+    registrationError,
+  } = useRegister();
 
   return (
     <Container maxWidth="xs">
-      <Paper elevation={3} style={{ padding: '16px', marginTop: '32px' }}>
+      <Paper elevation={3} style={{ padding: "16px", marginTop: "32px" }}>
         <Box display="flex" flexDirection="column" alignItems="center">
-          <Typography variant="h4" gutterBottom align="center" sx={{ marginTop: '8px' }}>
+          <Typography
+            variant="h4"
+            gutterBottom
+            align="center"
+            sx={{ marginTop: "8px" }}
+          >
             Register
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -93,7 +105,7 @@ const RegisterPage: React.FC = () => {
               type="submit"
               variant="contained"
               color="primary"
-              style={{ marginTop: '16px' }}
+              style={{ marginTop: "16px" }}
             >
               Register
             </Button>
@@ -101,7 +113,11 @@ const RegisterPage: React.FC = () => {
           <Typography variant="body2" sx={{ marginTop: 1 }}>
             Already registered? <Link to="/login">Click here</Link>
           </Typography>
-          {registrationError && <Typography color="error" sx={{ marginTop: 1 }}>{registrationError}</Typography>}
+          {registrationError && (
+            <Typography color="error" sx={{ marginTop: 1 }}>
+              {registrationError}
+            </Typography>
+          )}
         </Box>
       </Paper>
     </Container>

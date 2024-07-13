@@ -9,45 +9,43 @@ import CardMedia from "@mui/material/CardMedia";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../redux/store";
+import { RootState } from "../redux/store";
 import { ToastContainer, toast } from "react-toastify";
-import FavoriteButton from "../../utils/FavouriteButton/FavoriteButton";
-import UserComments from "../../utils/comments/UserComments";
-import CommentInput from "../../utils/comments/CommentInput";
-import RatingDisplayComponent from "../Rating/RatingDisplayComponent";
+import FavoriteButton from "../utils/FavouriteButton/FavoriteButton";
+import UserComments from "../components/comments/UserComments";
+import CommentInput from "../components/comments/CommentInput";
+import RatingDisplayComponent from "../components/Rating/RatingDisplayComponent";
 import {
   saveRatingToIndexedDB,
   saveCommentToIndexedDB,
   getCommentsFromIndexedDB,
-} from "../../utils/LocalForage/LocalForage";
-import { addRating, addComment } from "../../redux/slices/moviesSlice";
+} from "../utils/LocalForage/LocalForage";
+import { addRating, addComment } from "../redux/slices/moviesSlice";
 
 const MoviesDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const movieId = id || ""; 
+  const movieId = id || "";
 
   const movie = useSelector((state: RootState) =>
     state.movies.movies.find((m) => m.imdbID === movieId)
   );
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
-  const userDetails = useSelector((state: RootState) => state.user.userDetails); 
-  const userId = userDetails?.id || ""; 
-  const userName = userDetails?.name || ""; 
+  const userDetails = useSelector((state: RootState) => state.user.userDetails);
+  const userId = userDetails?.id || "";
+  const userName = userDetails?.name || "";
 
   const dispatch = useDispatch();
-
 
   const [comments, setComments] = useState<
     { userId: string; userName: string; comment: string }[]
   >([]);
-
 
   const [userRatings, setUserRatings] = useState<
     { userId: string; userName: string; rating: number }[]
   >([]);
 
   useEffect(() => {
-    if (!movieId) return; 
+    if (!movieId) return;
 
     const fetchComments = async () => {
       const savedComments = await getCommentsFromIndexedDB(movieId);

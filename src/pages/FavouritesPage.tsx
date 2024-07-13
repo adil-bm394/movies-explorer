@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { RootState } from "../../redux/store";
-import MovieCardPage from "../common/MovieCard";
+import { RootState } from "../redux/store";
+import MovieCardPage from "../components/common/MovieCard";
 
 const FavoritesPage: React.FC = () => {
   const favorites = useSelector(
