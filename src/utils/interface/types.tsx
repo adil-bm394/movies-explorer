@@ -2,9 +2,6 @@ export interface Movie {
   imdbID: string;
   Title: string;
   Poster: string;
-  description: string;
-  Rating: number;
-  comments: string[];
   Plot: string;
   imdbRating: string;
   Year: string;
@@ -18,16 +15,22 @@ export interface Movie {
   Country: string;
   Awards: string;
   BoxOffice: string;
+  comments: { userId: string; userName: string; comment: string }[];
+  ratings: { userId: string; userName: string; rating: number }[];
 }
+
 export interface RegisterFormInputs {
+  id?: string; // Added the `id` field for storing user IDs
   name: string;
   email: string;
   phone: string;
   password: string;
 }
+
 export interface CommentFormInputs {
   comment: string;
 }
+
 export interface MoviesState {
   movies: Movie[];
   loading: boolean;

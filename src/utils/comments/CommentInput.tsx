@@ -1,19 +1,19 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { addComment } from "../../redux/slices/moviesSlice";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { CommentFormInputs } from "../../utils/interface/types";
-import { toast } from "react-toastify";
 
 interface CommentInputProps {
   movieId: string;
   isLoggedIn: boolean;
+  onSubmit: (comment: string) => void;
 }
 
-const CommentInput: React.FC<CommentInputProps> = ({ movieId, isLoggedIn }) => {
-  const dispatch = useDispatch();
+const CommentInput: React.FC<CommentInputProps> = ({
+  isLoggedIn,
+  onSubmit,
+}) => {
   const {
     register,
     handleSubmit,
@@ -21,17 +21,15 @@ const CommentInput: React.FC<CommentInputProps> = ({ movieId, isLoggedIn }) => {
     reset,
   } = useForm<CommentFormInputs>();
 
-  const onSubmit = (data: CommentFormInputs) => {
+  const handleFormSubmit = (data: CommentFormInputs) => {
     if (isLoggedIn) {
-      dispatch(addComment({ movieId, comment: data.comment }));
+      onSubmit(data.comment);
       reset();
-    } else {
-      toast.error("You must be logged in to add comments.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(handleFormSubmit)}>
       <TextField
         label="Add Comment"
         {...register("comment", { required: "Comment is required" })}

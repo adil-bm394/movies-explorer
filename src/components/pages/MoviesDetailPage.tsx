@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -6,39 +6,80 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import IconButton from "@mui/material/IconButton";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/store";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import FavoriteButton from "../../utils/FavouriteButton/FavoriteButton"; 
+import FavoriteButton from "../../utils/FavouriteButton/FavoriteButton";
 import UserComments from "../../utils/comments/UserComments";
 import CommentInput from "../../utils/comments/CommentInput";
 import RatingComponent from "../../utils/Rating/RatingComponent";
-import { toast } from "react-toastify";
+import {
+  getCommentsFromIndexedDB,
+  getRatingsFromIndexedDB,
+  saveRatingToIndexedDB,
+  saveCommentToIndexedDB,
+} from "../../utils/LocalForage/LocalForage";
+import { addRating, addComment } from "../../redux/slices/moviesSlice";
 
 const MoviesDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const movieId = id;
+  const movieId = id || ""; // Set movieId to an empty string if id is undefined
 
   const movie = useSelector((state: RootState) =>
     state.movies.movies.find((m) => m.imdbID === movieId)
   );
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const userDetails = useSelector((state: RootState) => state.user.userDetails); // Get userDetails from state
+  const userId = userDetails?.id || ""; // Extract userId from userDetails
+  const userName = userDetails?.name || ""; // Extract userName from userDetails
 
-  // State for rating
+  const dispatch = useDispatch();
+
+  // State for rating and comments
   const [rating, setRating] = useState<number | null>(null);
+  const [comments, setComments] = useState<
+    { userId: string; userName: string; comment: string }[]
+  >([]);
+
+  useEffect(() => {
+    if (!movieId) return; // Early return if movieId is not available
+
+    const fetchCommentsAndRatings = async () => {
+      const savedComments = await getCommentsFromIndexedDB(movieId);
+      setComments(savedComments);
+      const savedRatings = await getRatingsFromIndexedDB(movieId);
+      if (savedRatings.length > 0) {
+        setRating(savedRatings[0].rating);
+      }
+    };
+
+    fetchCommentsAndRatings();
+  }, [movieId]);
 
   if (!movie) {
     return <Typography>Movie not found</Typography>;
   }
 
-  const handleRatingClick = (value: number) => {
+  const handleRatingClick = async (value: number) => {
     if (isLoggedIn) {
       console.log(`User rated ${movie.Title} with ${value} stars.`);
       setRating(value);
+      await saveRatingToIndexedDB(movieId, { userId, userName, rating: value });
+      dispatch(addRating({ movieId, rating: value, userId, userName }));
     } else {
       toast.error("You must be logged in to rate movies.");
+    }
+  };
+
+  const handleCommentSubmit = async (comment: string) => {
+    if (isLoggedIn) {
+      const newComment = { userId, userName, comment };
+      await saveCommentToIndexedDB(movieId, newComment);
+      dispatch(addComment({ movieId, comment, userId, userName }));
+      setComments([...comments, newComment]);
+    } else {
+      toast.error("You must be logged in to add comments.");
     }
   };
 
@@ -57,7 +98,6 @@ const MoviesDetailPage: React.FC = () => {
             title={movie.Title}
             sx={{ flex: "1 1 auto", maxWidth: "50%", objectFit: "fill" }}
           />
-
           <CardContent sx={{ flex: "1 1 auto", maxWidth: "100%" }}>
             <Box
               sx={{
@@ -146,11 +186,15 @@ const MoviesDetailPage: React.FC = () => {
 
         <CardContent>
           {isLoggedIn && (
-            <CommentInput movieId={movie.imdbID} isLoggedIn={isLoggedIn} />
+            <CommentInput
+              movieId={movie.imdbID}
+              isLoggedIn={isLoggedIn}
+              onSubmit={handleCommentSubmit}
+            />
           )}
 
           {/* User comments */}
-          <UserComments comments={movie.comments} />
+          <UserComments comments={comments} />
         </CardContent>
       </Card>
     </Container>

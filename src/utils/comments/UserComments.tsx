@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 interface UserCommentsProps {
-  comments: string[];
+  comments: { userId: string; userName: string; comment: string }[];
 }
 
 const UserComments: React.FC<UserCommentsProps> = ({ comments }) => {
@@ -14,7 +14,7 @@ const UserComments: React.FC<UserCommentsProps> = ({ comments }) => {
         comments.map((comment, index) => (
           <Box key={index} sx={{ marginTop: 1 }}>
             <Typography variant="body2" color="textSecondary">
-              {comment}
+              <strong>{comment.userName}</strong>: {comment.comment}
             </Typography>
           </Box>
         ))
