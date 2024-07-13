@@ -35,7 +35,11 @@ export const saveRatingToIndexedDB = async (
     userName: string;
     rating: number;
   }[] = (await ratingsStore.getItem(movieId)) || [];
-  await ratingsStore.setItem(movieId, [...existingRatings, rating]);
+  const updatedRatings = existingRatings.filter(
+    (r) => r.userId !== rating.userId
+  );
+  updatedRatings.push(rating);
+  await ratingsStore.setItem(movieId, updatedRatings);
 };
 
 export const getRatingsFromIndexedDB = async (

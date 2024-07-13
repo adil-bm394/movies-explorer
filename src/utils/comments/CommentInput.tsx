@@ -2,7 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { CommentFormInputs } from "../../utils/interface/types";
+import { CommentFormInputs } from "../interface/types";
 
 interface CommentInputProps {
   movieId: string;

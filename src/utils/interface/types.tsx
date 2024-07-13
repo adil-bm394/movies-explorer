@@ -20,7 +20,7 @@ export interface Movie {
 }
 
 export interface RegisterFormInputs {
-  id?: string; // Added the `id` field for storing user IDs
+  id?: string; 
   name: string;
   email: string;
   phone: string;

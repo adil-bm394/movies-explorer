@@ -6,65 +6,60 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/store";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import FavoriteButton from "../../utils/FavouriteButton/FavoriteButton";
 import UserComments from "../../utils/comments/UserComments";
 import CommentInput from "../../utils/comments/CommentInput";
-import RatingComponent from "../../utils/Rating/RatingComponent";
+import RatingDisplayComponent from "../Rating/RatingDisplayComponent";
 import {
-  getCommentsFromIndexedDB,
-  getRatingsFromIndexedDB,
   saveRatingToIndexedDB,
   saveCommentToIndexedDB,
+  getCommentsFromIndexedDB,
 } from "../../utils/LocalForage/LocalForage";
 import { addRating, addComment } from "../../redux/slices/moviesSlice";
 
 const MoviesDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const movieId = id || ""; // Set movieId to an empty string if id is undefined
+  const movieId = id || ""; 
 
   const movie = useSelector((state: RootState) =>
     state.movies.movies.find((m) => m.imdbID === movieId)
   );
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
-  const userDetails = useSelector((state: RootState) => state.user.userDetails); // Get userDetails from state
-  const userId = userDetails?.id || ""; // Extract userId from userDetails
-  const userName = userDetails?.name || ""; // Extract userName from userDetails
+  const userDetails = useSelector((state: RootState) => state.user.userDetails); 
+  const userId = userDetails?.id || ""; 
+  const userName = userDetails?.name || ""; 
 
   const dispatch = useDispatch();
 
-  // State for rating and comments
-  const [rating, setRating] = useState<number | null>(null);
+
   const [comments, setComments] = useState<
     { userId: string; userName: string; comment: string }[]
   >([]);
 
-  useEffect(() => {
-    if (!movieId) return; // Early return if movieId is not available
 
-    const fetchCommentsAndRatings = async () => {
+  const [userRatings, setUserRatings] = useState<
+    { userId: string; userName: string; rating: number }[]
+  >([]);
+
+  useEffect(() => {
+    if (!movieId) return; 
+
+    const fetchComments = async () => {
       const savedComments = await getCommentsFromIndexedDB(movieId);
       setComments(savedComments);
-      const savedRatings = await getRatingsFromIndexedDB(movieId);
-      if (savedRatings.length > 0) {
-        setRating(savedRatings[0].rating);
-      }
     };
 
-    fetchCommentsAndRatings();
+    fetchComments();
   }, [movieId]);
-
-  if (!movie) {
-    return <Typography>Movie not found</Typography>;
-  }
 
   const handleRatingClick = async (value: number) => {
     if (isLoggedIn) {
-      console.log(`User rated ${movie.Title} with ${value} stars.`);
-      setRating(value);
+      console.log(`User rated ${movie?.Title} with ${value} stars.`);
       await saveRatingToIndexedDB(movieId, { userId, userName, rating: value });
       dispatch(addRating({ movieId, rating: value, userId, userName }));
     } else {
@@ -83,9 +78,18 @@ const MoviesDetailPage: React.FC = () => {
     }
   };
 
+  const handleRatingsFetched = (
+    ratings: { userId: string; userName: string; rating: number }[]
+  ) => {
+    setUserRatings(ratings);
+  };
+
+  if (!movie) {
+    return <Typography>Movie not found</Typography>;
+  }
+
   return (
     <Container>
-      <ToastContainer />
       <Card sx={{ marginTop: 4 }}>
         <Box
           sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}
@@ -173,10 +177,10 @@ const MoviesDetailPage: React.FC = () => {
                   <Typography variant="body1" sx={{ marginRight: 1 }}>
                     Rate this movie:
                   </Typography>
-                  <RatingComponent
-                    isLoggedIn={isLoggedIn}
-                    initialRating={rating}
+                  <RatingDisplayComponent
+                    movieId={movie.imdbID}
                     onRatingClick={handleRatingClick}
+                    onRatingsFetched={handleRatingsFetched}
                   />
                 </Box>
               </Box>
@@ -195,8 +199,29 @@ const MoviesDetailPage: React.FC = () => {
 
           {/* User comments */}
           <UserComments comments={comments} />
+
+          {/* User Ratings */}
+          <Box sx={{ marginTop: 2 }}>
+            <Typography variant="h6" component="div">
+              User Ratings
+            </Typography>
+            {userRatings.length > 0 ? (
+              <List>
+                {userRatings.map((rating) => (
+                  <ListItem key={rating.userId}>
+                    <Typography variant="body1">
+                      <strong>{rating.userName}:</strong> {rating.rating} stars
+                    </Typography>
+                  </ListItem>
+                ))}
+              </List>
+            ) : (
+              <Typography>No ratings yet.</Typography>
+            )}
+          </Box>
         </CardContent>
       </Card>
+      <ToastContainer />
     </Container>
   );
 };

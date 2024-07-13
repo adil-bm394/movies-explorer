@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
@@ -17,24 +17,28 @@ const RatingComponent: React.FC<RatingComponentProps> = ({
   onRatingClick,
 }) => {
   const [rating, setRating] = useState<number | null>(initialRating);
+
+  useEffect(() => {
+    setRating(initialRating);
+  }, [initialRating]);
+
   const handleRatingClick = (value: number) => {
     if (isLoggedIn) {
-      if (rating === value) {
-        setRating(null);
-        onRatingClick(0);
-      } else {
-        setRating(value);
-        onRatingClick(value);
-      }
+      setRating(value);
+      onRatingClick(value);
     } else {
-      toast.error("User must be logged in to rate movies.");
+      toast.error("You must be logged in to rate movies.");
     }
   };
 
   return (
-    <React.Fragment>
+    <>
       {[1, 2, 3, 4, 5].map((value) => (
-        <IconButton key={value} onClick={() => handleRatingClick(value)}>
+        <IconButton
+          key={value}
+          onClick={() => handleRatingClick(value)}
+          //disabled={!isLoggedIn}
+        >
           {rating && rating >= value ? (
             <StarIcon sx={{ color: "yellow" }} />
           ) : (
@@ -42,7 +46,7 @@ const RatingComponent: React.FC<RatingComponentProps> = ({
           )}
         </IconButton>
       ))}
-    </React.Fragment>
+    </>
   );
 };
 

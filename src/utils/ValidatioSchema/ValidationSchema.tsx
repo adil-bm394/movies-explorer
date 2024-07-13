@@ -1,4 +1,4 @@
-// src/utils/ValidatioSchema/ValidationSchema.ts
+
 import * as yup from "yup";
 
 const registerSchema = yup.object().shape({
